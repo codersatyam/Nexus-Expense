@@ -36,6 +36,8 @@ export default function RecordsScreen() {
     { id: 'lastWeek', label: 'Last Week' },
     { id: 'thisMonth', label: 'This Month' },
     { id: 'lastMonth', label: 'Last Month' },
+    { id: 'thisYear', label: 'This Year' },
+    { id: 'lastYear', label: 'Last Year' },
     { id: 'all', label: 'All Time' },
   ];
 
@@ -84,12 +86,16 @@ export default function RecordsScreen() {
 
     switch (selectedDateFilter) {
       case 'today':
+        const tomorrow = new Date(today);
+        tomorrow.setDate(tomorrow.getDate() + 1);
+        console.log('📅 Today filter: from', today.toISOString(), 'to', tomorrow.toISOString());
         filtered = filtered.filter(expense => {
           const expenseDate = new Date(expense.expenseDate);
-          return expenseDate >= today;
+          return expenseDate >= today && expenseDate < tomorrow;
         });
         break;
       case 'yesterday':
+        console.log('📅 Yesterday filter: from', yesterday.toISOString(), 'to', today.toISOString());
         filtered = filtered.filter(expense => {
           const expenseDate = new Date(expense.expenseDate);
           return expenseDate >= yesterday && expenseDate < today;
@@ -98,9 +104,14 @@ export default function RecordsScreen() {
       case 'thisWeek':
         const startOfWeek = new Date(today);
         startOfWeek.setDate(today.getDate() - today.getDay());
+        const endOfWeek = new Date(startOfWeek);
+        endOfWeek.setDate(startOfWeek.getDate() + 6);
+        const endOfWeekNext = new Date(endOfWeek);
+        endOfWeekNext.setDate(endOfWeek.getDate() + 1);
+        console.log('📅 This Week filter: from', startOfWeek.toISOString(), 'to', endOfWeekNext.toISOString());
         filtered = filtered.filter(expense => {
           const expenseDate = new Date(expense.expenseDate);
-          return expenseDate >= startOfWeek;
+          return expenseDate >= startOfWeek && expenseDate < endOfWeekNext;
         });
         break;
       case 'lastWeek':
@@ -108,27 +119,62 @@ export default function RecordsScreen() {
         startOfLastWeek.setDate(today.getDate() - today.getDay() - 7);
         const endOfLastWeek = new Date(startOfLastWeek);
         endOfLastWeek.setDate(startOfLastWeek.getDate() + 6);
+        const endOfLastWeekNext = new Date(endOfLastWeek);
+        endOfLastWeekNext.setDate(endOfLastWeek.getDate() + 1);
+        console.log('📅 Last Week filter: from', startOfLastWeek.toISOString(), 'to', endOfLastWeekNext.toISOString());
         filtered = filtered.filter(expense => {
           const expenseDate = new Date(expense.expenseDate);
-          return expenseDate >= startOfLastWeek && expenseDate <= endOfLastWeek;
+          return expenseDate >= startOfLastWeek && expenseDate < endOfLastWeekNext;
         });
         break;
       case 'thisMonth':
         const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+        const endOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+        const endOfMonthNext = new Date(endOfMonth);
+        endOfMonthNext.setDate(endOfMonth.getDate() + 1);
+        console.log('📅 This Month filter: from', startOfMonth.toISOString(), 'to', endOfMonthNext.toISOString());
         filtered = filtered.filter(expense => {
           const expenseDate = new Date(expense.expenseDate);
-          return expenseDate >= startOfMonth;
+          return expenseDate >= startOfMonth && expenseDate < endOfMonthNext;
         });
         break;
       case 'lastMonth':
         const startOfLastMonth = new Date(now.getFullYear(), now.getMonth() - 1, 1);
         const endOfLastMonth = new Date(now.getFullYear(), now.getMonth(), 0);
+        const endOfLastMonthNext = new Date(endOfLastMonth);
+        endOfLastMonthNext.setDate(endOfLastMonth.getDate() + 1);
+        console.log('📅 Last Month filter: from', startOfLastMonth.toISOString(), 'to', endOfLastMonthNext.toISOString());
         filtered = filtered.filter(expense => {
           const expenseDate = new Date(expense.expenseDate);
-          return expenseDate >= startOfLastMonth && expenseDate <= endOfLastMonth;
+          return expenseDate >= startOfLastMonth && expenseDate < endOfLastMonthNext;
         });
         break;
-      // 'all' case - no date filtering
+      case 'thisYear':
+        const startOfYear = new Date(now.getFullYear(), 0, 1);
+        const endOfYear = new Date(now.getFullYear(), 11, 31);
+        const endOfYearNext = new Date(endOfYear);
+        endOfYearNext.setDate(endOfYear.getDate() + 1);
+        console.log('📅 This Year filter: from', startOfYear.toISOString(), 'to', endOfYearNext.toISOString());
+        filtered = filtered.filter(expense => {
+          const expenseDate = new Date(expense.expenseDate);
+          return expenseDate >= startOfYear && expenseDate < endOfYearNext;
+        });
+        break;
+      case 'lastYear':
+        const startOfLastYear = new Date(now.getFullYear() - 1, 0, 1);
+        const endOfLastYear = new Date(now.getFullYear() - 1, 11, 31);
+        const endOfLastYearNext = new Date(endOfLastYear);
+        endOfLastYearNext.setDate(endOfLastYear.getDate() + 1);
+        console.log('📅 Last Year filter: from', startOfLastYear.toISOString(), 'to', endOfLastYearNext.toISOString());
+        filtered = filtered.filter(expense => {
+          const expenseDate = new Date(expense.expenseDate);
+          return expenseDate >= startOfLastYear && expenseDate < endOfLastYearNext;
+        });
+        break;
+      case 'all':
+        console.log('📅 All Time filter: showing all expenses');
+        // No filtering needed - show all expenses
+        break;
     }
 
     console.log('📅 After date filtering:', filtered.length, 'expenses');
@@ -279,10 +325,10 @@ export default function RecordsScreen() {
         </View>
         <View style={styles.totalItemInfo}>
           <Text style={styles.totalItemLabel}>{item.category}</Text>
-          <Text style={styles.totalItemCount}>{item.count} transactions</Text>
+          <Text style={[styles.totalItemCount]}>{item.count} transactions</Text>
         </View>
+        <Text style={[styles.totalItemAmount, {fontWeight: 'bold'}]}>{formatCurrency(item.total)}</Text>
       </View>
-      <Text style={styles.totalItemAmount}>{formatCurrency(item.total)}</Text>
     </View>
   );
 
@@ -293,8 +339,8 @@ export default function RecordsScreen() {
           <Text style={styles.totalItemLabel}>{item.tag}</Text>
           <Text style={styles.totalItemCount}>{item.count} transactions</Text>
         </View>
+        <Text style={styles.totalItemAmount}>{formatCurrency(item.total)}</Text>
       </View>
-      <Text style={styles.totalItemAmount}>{formatCurrency(item.total)}</Text>
     </View>
   );
 

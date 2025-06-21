@@ -16,10 +16,20 @@ import {
 import { router } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
+import { 
+  verifyPin, 
+  validatePinFormat,
+  getPinStatus 
+} from '../../services/pinService';
 
 export default function PhoneScreen() {
   const [pin, setPin] = useState('');
   const [isValid, setIsValid] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
+  const [pinStatus, setPinStatus] = useState<{
+    isSet: boolean;
+    enabled: boolean;
+  } | null>(null);
   
   // Animation values
   const fadeAnim = useRef(new Animated.Value(0)).current;
@@ -86,23 +96,82 @@ export default function PhoneScreen() {
     };
 
     animateBubbles();
+    checkPinStatus();
   }, []);
 
-  const validatePin = (pinNumber: string) => {
-    // Basic validation for 4-digit PIN
-    const pinRegex = /^\d{4}$/;
-    return pinRegex.test(pinNumber);
+  const checkPinStatus = async () => {
+    try {
+      const status = await getPinStatus();
+      console.log('PIN Status check:', status);
+      setPinStatus(status);
+      
+      if (status.isSet && status.enabled) {
+        console.log('PIN is set and enabled, showing PIN screen');
+        // PIN is set, stay on this screen for verification
+      } else {
+        console.log('No PIN set, redirecting to main app');
+        // If no PIN is set, go directly to main app
+        router.replace('/(tabs)');
+      }
+    } catch (error) {
+      console.error('Error checking PIN status:', error);
+      // On error, assume no PIN and go to main app
+      router.replace('/(tabs)');
+    }
   };
 
-  const handleContinue = () => {
-    if (validatePin(pin)) {
-      setIsValid(true);
-      // Navigate directly to home screen
-      router.push('/(tabs)');
-    } else {
+  const validatePin = (pinNumber: string) => {
+    const validation = validatePinFormat(pinNumber);
+    console.log('PIN validation:', { pin: pinNumber, isValid: validation.isValid });
+    return validation.isValid;
+  };
+
+  const handleContinue = async () => {
+    console.log('handleContinue called with pin length:', pin.length);
+    
+    if (!validatePin(pin)) {
       setIsValid(false);
       Alert.alert('Invalid PIN', 'Please enter a valid 4-digit PIN');
+      return;
     }
+
+    setIsLoading(true);
+    setIsValid(true);
+
+    try {
+      // Only verify existing PIN since setup is handled in settings
+      console.log('Verifying existing PIN');
+      const isValidPin = await verifyPin(pin);
+      if (isValidPin) {
+        router.push('/(tabs)');
+      } else {
+        setIsValid(false);
+        Alert.alert('Incorrect PIN', 'Please enter the correct PIN');
+      }
+    } catch (error) {
+      console.error('Error in PIN operation:', error);
+      Alert.alert('Error', 'An error occurred. Please try again.');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const getTitle = () => {
+    return 'Welcome Back!';
+  };
+
+  const getSubtitle = () => {
+    return 'Enter your PIN to continue';
+  };
+
+  const getButtonText = () => {
+    if (isLoading) return 'Please wait...';
+    return 'Unlock';
+  };
+
+  const isButtonDisabled = () => {
+    if (isLoading) return true;
+    return pin.length < 4;
   };
 
   return (
@@ -175,8 +244,8 @@ export default function PhoneScreen() {
             }]}
           >
             <View style={styles.card}>
-              <Text style={styles.welcomeText}>Welcome!</Text>
-              <Text style={styles.subtitle}>Enter your 4-digit PIN to continue</Text>
+              <Text style={styles.welcomeText}>{getTitle()}</Text>
+              <Text style={styles.subtitle}>{getSubtitle()}</Text>
               
               <View style={styles.inputContainer}>
                 <TextInput
@@ -191,6 +260,7 @@ export default function PhoneScreen() {
                     if (!isValid) setIsValid(true);
                   }}
                   placeholderTextColor="#999"
+                  editable={!isLoading}
                 />
               </View>
               
@@ -200,24 +270,26 @@ export default function PhoneScreen() {
 
               <View style={styles.buttonWrapper}>
                 {/* Add shimmer effect to the button when disabled */}
-                {pin.length < 4 && (
+                {isButtonDisabled() && (
                   <View style={styles.buttonOverlay} />
                 )}
                 
                 <TouchableOpacity 
-                  style={styles.button}
+                  style={[styles.button, isButtonDisabled() && styles.buttonDisabled]}
                   onPress={handleContinue}
-                  disabled={pin.length < 4}
+                  disabled={isButtonDisabled()}
                   activeOpacity={0.7}
                 >
-                  <Text style={styles.buttonText}>
-                    {pin.length < 4 ? 'Continue' : 'Continue'}
+                  <Text style={[styles.buttonText, isButtonDisabled() && styles.buttonTextDisabled]}>
+                    {getButtonText()}
                   </Text>
                   
                   {/* Show progress indicator based on input length */}
                   <View style={styles.progressContainer}>
                     <View 
-                      style={[styles.progressBar, { width: `${Math.min(pin.length * 25, 100)}%` }]} 
+                      style={[styles.progressBar, { 
+                        width: `${Math.min(pin.length * 25, 100)}%` 
+                      }]} 
                     />
                   </View>
                 </TouchableOpacity>
@@ -398,5 +470,11 @@ const styles = StyleSheet.create({
     height: 50,
     top: '20%',
     right: '30%',
+  },
+  buttonDisabled: {
+    backgroundColor: '#ccc',
+  },
+  buttonTextDisabled: {
+    color: '#999',
   },
 });

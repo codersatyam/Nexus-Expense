@@ -11,6 +11,16 @@ export default function HomeScreen() {
   const [expenses, setExpenses] = useState<Expense[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [showSplash, setShowSplash] = useState(true);
+
+  // Show splash screen for 2 seconds
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowSplash(false);
+    }, 2000);
+
+    return () => clearTimeout(timer);
+  }, []);
 
   // Fetch expenses from API
   const loadExpenses = async () => {
@@ -105,6 +115,36 @@ export default function HomeScreen() {
       </View>
     );
   };
+
+  // Splash Screen
+  if (showSplash) {
+    return (
+      <View style={styles.splashContainer}>
+        <View style={styles.splashContent}>
+          {/* App Icon */}
+          <View style={styles.splashIconContainer}>
+            <Ionicons name="wallet" size={80} color="#007AFF" />
+          </View>
+
+          {/* App Name */}
+          <Text style={styles.splashAppName}>Expenses Tracker</Text>
+          
+          {/* Subtitle */}
+          <Text style={styles.splashSubtitle}>Smart Finance Management</Text>
+
+          {/* Loading Message */}
+          <View style={styles.splashLoadingContainer}>
+            <Text style={styles.splashLoadingText}>Loading...</Text>
+            <View style={styles.splashLoadingDots}>
+              <View style={styles.splashDot} />
+              <View style={styles.splashDot} />
+              <View style={styles.splashDot} />
+            </View>
+          </View>
+        </View>
+      </View>
+    );
+  }
 
   // Loading state
   if (isLoading) {
@@ -581,5 +621,52 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 14,
     fontWeight: '600',
+  },
+  splashContainer: {
+    flex: 1,
+    backgroundColor: '#f5f6fa',
+  },
+  splashContent: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  splashIconContainer: {
+    backgroundColor: '#4264ED',
+    borderRadius: 40,
+    padding: 16,
+  },
+  splashAppName: {
+    color: '#4264ED',
+    fontSize: 24,
+    fontWeight: '600',
+    marginTop: 16,
+  },
+  splashSubtitle: {
+    color: '#666',
+    fontSize: 14,
+    marginTop: 4,
+  },
+  splashLoadingContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 24,
+  },
+  splashLoadingText: {
+    color: '#4264ED',
+    fontSize: 18,
+    fontWeight: '600',
+  },
+  splashLoadingDots: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginLeft: 8,
+  },
+  splashDot: {
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+    backgroundColor: '#4264ED',
+    marginHorizontal: 2,
   },
 });

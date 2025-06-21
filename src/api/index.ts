@@ -5,4 +5,5 @@
 
 export * from './authApi';
 export * from './expenseApi';
+export * from './lendApi';
 // Future API modules will be exported here

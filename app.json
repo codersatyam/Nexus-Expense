@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "TrueLeads",
-    "slug": "TrueLeads",
+    "name": "Nexus",
+    "slug": "Nexus",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -34,7 +34,8 @@
           "resizeMode": "contain",
           "backgroundColor": "#ffffff"
         }
-      ]
+      ],
+      "expo-notifications"
     ],
     "experiments": {
       "typedRoutes": true

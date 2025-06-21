@@ -86,9 +86,9 @@ android {
     buildToolsVersion rootProject.ext.buildToolsVersion
     compileSdk rootProject.ext.compileSdkVersion
 
-    namespace 'com.satyammittal.TrueLeads'
+    namespace 'com.satyammittal.Nexus'
     defaultConfig {
-        applicationId 'com.satyammittal.TrueLeads'
+        applicationId 'com.satyammittal.Nexus'
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1

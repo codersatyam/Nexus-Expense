@@ -21,7 +21,7 @@ extensions.configure(com.facebook.react.ReactSettingsExtension) { ex ->
   }
 }
 
-rootProject.name = 'TrueLeads'
+rootProject.name = 'Nexus'
 
 dependencyResolutionManagement {
   versionCatalogs {

@@ -1,4 +1,4 @@
-package com.satyammittal.TrueLeads
+package com.satyammittal.Nexus
 
 import android.app.Application
 import android.content.res.Configuration

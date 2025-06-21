@@ -1,4 +1,4 @@
-package com.satyammittal.TrueLeads
+package com.satyammittal.Nexus
 import expo.modules.splashscreen.SplashScreenManager
 
 import android.os.Build

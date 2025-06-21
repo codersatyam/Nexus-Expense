@@ -13,7 +13,7 @@ import {
 import { router } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { fetchExpenses, Expense } from '../../api/expenseApi';
-import { categories, Category } from '../../constants/categories';
+import { categories, Category, categoryTags } from '../../constants/categories';
 import { formatCurrency, formatDate } from '../../utils/formatters';
 
 export default function RecordsScreen() {
@@ -257,7 +257,8 @@ export default function RecordsScreen() {
 
   const renderExpenseItem = ({ item }: { item: Expense }) => {
     const category = categories.find((c: Category) => c.name === item.category);
-    
+    const tags = categoryTags[item.category as keyof typeof categoryTags] || [];
+
     return (
       <View style={styles.expenseItem}>
         <View style={styles.expenseHeader}>
@@ -284,9 +285,9 @@ export default function RecordsScreen() {
             </View>
           )}
           
-          {item.tag && (
-            <Text style={styles.expenseTag}>• {item.tag}</Text>
-          )}
+          {tags.map((tag, index) => (
+            <Text key={index} style={styles.expenseTag}>• {tag}</Text>
+          ))}
           
           <Text style={styles.expenseDate}>• {formatDate(new Date(item.expenseDate))}</Text>
         </View>

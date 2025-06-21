@@ -38,9 +38,9 @@ const categoryTags = {
   Entertainment: ['Netflix', 'Amazon Prime', 'Movie Theater', 'Concert', 'Games', 'Others'],
   Utilities: ['Electricity', 'Water', 'Gas', 'Internet', 'Phone Bill', 'Others'],
   Shopping: ['Amazon', 'Flipkart', 'Mall', 'Local Market', 'Online Store', 'Others'],
-  Health: ['Pharmacy', 'Doctor', 'Hospital', 'Gym', 'Supplements', 'Others'],
+  Health: ['Pharmacy', 'Doctor', 'Hospital', 'Gym', 'Supplements', 'Tata 1MG', 'Others'],
   Education: ['Books', 'Course', 'Tuition', 'Stationery', 'Online Course', 'Others'],
-  Travel: ['Flight', 'Hotel', 'Train', 'Bus', 'Car', 'Others'],
+  Travel: ['Flight', 'Hotel', 'Train', 'Bus', 'Car', 'Metro', 'Others'],
   House: ['Rent', 'Maintenance', 'Repairs', 'Utilities', 'Others'],
   Others: ['Miscellaneous', 'Personal Care', 'Gifts', 'Donations', 'Custom'],
 };

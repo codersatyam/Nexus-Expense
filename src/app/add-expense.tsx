@@ -28,6 +28,7 @@ const categories = [
   { name: 'Education', icon: 'school', color: '#98D8C8' },
   { name: 'Travel', icon: 'airplane', color: '#F7DC6F' },
   { name: 'House', icon: 'home', color: '#F7DC6F' },
+  {name: "Trip", icon: 'mountain', color: '#F7DC6F'},
   { name: 'Others', icon: 'ellipsis-horizontal', color: '#F7DC6F' },
 ];
 
@@ -42,6 +43,7 @@ const categoryTags = {
   Education: ['Books', 'Course', 'Tuition', 'Stationery', 'Online Course', 'Others'],
   Travel: ['Flight', 'Hotel', 'Train', 'Bus', 'Car', 'Metro', 'Others'],
   House: ['Rent', 'Maintenance', 'Repairs', 'Utilities', 'Others'],
+  Trip: ['Solo', 'Group', 'Others'],
   Others: ['Miscellaneous', 'Personal Care', 'Gifts', 'Donations', 'Custom'],
 };
 

@@ -132,9 +132,10 @@ export default function AddExpenseScreen() {
     setIsLoading(true);
 
     try {
-      const userId = await AsyncStorage.getItem('userId') || '';
+      const userDataStr = await AsyncStorage.getItem('email_verification_status');
+      const userData = userDataStr ? JSON.parse(userDataStr) : {};
       const expenseData: AddExpenseRequest = {
-        userId: userId,
+        userId: userData?.userId,
         title: title.trim(),
         amount: parseInt(amount, 10),
         expenseDate: date,

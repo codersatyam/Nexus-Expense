@@ -46,10 +46,9 @@ export default function RecordsScreen() {
     try {
       setIsLoading(true);
       setError(null);
-      // Using hardcoded phone number for now - replace with actual user phone when needed
-      const phoneNumber = '9548313517';
-      console.log('🔍 Fetching expenses for phone:', phoneNumber);
-      const data = await fetchExpenses(phoneNumber);
+      const userData = JSON.parse(localStorage.getItem('email_verification_status') || '{}');
+      console.log('🔍 Fetching expenses for userId:', userData);
+      const data = await fetchExpenses(userData?.userId);
       console.log('📊 Raw API response data:', JSON.stringify(data, null, 2));
       console.log('📈 Number of expenses received:', data.length);
       setExpenses(data);

@@ -194,11 +194,12 @@ const mockLends: Lend[] = [
 /**
  * Get all lends for a user
  */
-export const getAllLends = async (phoneNumber?: string): Promise<Lend[]> => {
+export const getAllLends = async (): Promise<Lend[]> => {
   try {
     // If phone number is provided, use real API
-    if (phoneNumber) {
-      const apiResponse = await fetchAllLends(phoneNumber);
+    const userData = JSON.parse(localStorage.getItem('email_verification_status') || '{}');
+    if (userData) {
+      const apiResponse = await fetchAllLends(userData?.userId);
       return apiResponse.map(convertApiResponseToLend);
     }
     
@@ -248,9 +249,9 @@ export const filterLendsByTimeFrame = (lends: Lend[], timeFrame: TimeFrame): Len
 /**
  * Search lends by name
  */
-export const searchLendsByName = async (searchTerm: string, phoneNumber?: string): Promise<Lend[]> => {
+export const searchLendsByName = async (searchTerm: string): Promise<Lend[]> => {
   await new Promise(resolve => setTimeout(resolve, 300));
-  const allLends = await getAllLends(phoneNumber);
+  const allLends = await getAllLends();
   
   if (!searchTerm.trim()) {
     return allLends;
@@ -264,9 +265,9 @@ export const searchLendsByName = async (searchTerm: string, phoneNumber?: string
 /**
  * Search lends by status
  */
-export const searchLendsByStatus = async (status: LendStatus | 'all', phoneNumber?: string): Promise<Lend[]> => {
+export const searchLendsByStatus = async (status: LendStatus | 'all'): Promise<Lend[]> => {
   await new Promise(resolve => setTimeout(resolve, 300));
-  const allLends = await getAllLends(phoneNumber);
+  const allLends = await getAllLends();
   
   if (status === 'all') {
     return allLends;
@@ -282,10 +283,9 @@ export const searchLendsByNameStatusAndTime = async (
   searchTerm: string, 
   status: LendStatus | 'all',
   timeFrame: TimeFrame,
-  phoneNumber?: string
 ): Promise<Lend[]> => {
   await new Promise(resolve => setTimeout(resolve, 300));
-  const allLends = await getAllLends(phoneNumber);
+  const allLends = await getAllLends();
   
   // First filter by time frame
   const timeFilteredLends = filterLendsByTimeFrame(allLends, timeFrame);
@@ -305,14 +305,14 @@ export const searchLendsByNameStatusAndTime = async (
  */
 export const addLend = async (
   lendData: Omit<Lend, 'id' | 'createdAt' | 'updatedAt'>,
-  phoneNumber?: string
 ): Promise<Lend> => {
   try {
+    const userData = JSON.parse(localStorage.getItem('email_verification_status') || '{}');
     // If phone number is provided, use real API
-    if (phoneNumber) {
+    if (userData) {
       // Convert local lend data to API format
       const apiRequest: AddLendRequest = {
-        phoneNo: phoneNumber,
+        userId: userData?.userId,
         name: lendData.name,
         title: lendData.title,
         amount: lendData.totalAmount,
@@ -359,11 +359,12 @@ export const addLend = async (
 /**
  * Get lend by ID
  */
-export const getLendById = async (id: string, phoneNumber?: string): Promise<Lend | null> => {
+export const getLendById = async (id: string): Promise<Lend | null> => {
   try {
     // If phone number is provided, fetch from API
-    if (phoneNumber) {
-      const allLends = await getAllLends(phoneNumber);
+    const userData = JSON.parse(localStorage.getItem('email_verification_status') || '{}');
+    if (userData) {
+      const allLends = await getAllLends();
       const foundLend = allLends.find(lend => lend.id === id);
       return foundLend || null;
     }
@@ -385,9 +386,10 @@ export const getLendById = async (id: string, phoneNumber?: string): Promise<Len
 export const updateLendStatus = async (id: string, status: LendStatus, phoneNumber?: string): Promise<Lend | null> => {
   try {
     // If phone number is provided, use real API
-    if (phoneNumber) {
+    const userData = JSON.parse(localStorage.getItem('email_verification_status') || '{}');
+    if (userData) {
       // First get the current lend data
-      const allLends = await getAllLends(phoneNumber);
+      const allLends = await getAllLends();
       const currentLend = allLends.find(lend => lend.id === id);
       
       if (!currentLend) {
@@ -398,7 +400,7 @@ export const updateLendStatus = async (id: string, status: LendStatus, phoneNumb
       // Prepare update request
       const updateRequest: UpdateLendRequest = {
         id: currentLend.id,
-        phoneNo: phoneNumber,
+        userId: userData?.userId,
         name: currentLend.name,
         title: currentLend.title,
         amount: currentLend.totalAmount,
@@ -446,13 +448,13 @@ export const updateLendPayment = async (
   id: string, 
   partial: number, 
   due: number,
-  phoneNumber?: string
 ): Promise<Lend | null> => {
   try {
     // If phone number is provided, use real API
-    if (phoneNumber) {
+    const userData = JSON.parse(localStorage.getItem('email_verification_status') || '{}');
+    if (userData) {
       // First get the current lend data
-      const allLends = await getAllLends(phoneNumber);
+      const allLends = await getAllLends();
       const currentLend = allLends.find(lend => lend.id === id);
       
       if (!currentLend) {
@@ -471,7 +473,7 @@ export const updateLendPayment = async (
       // Prepare update request
       const updateRequest: UpdateLendRequest = {
         id: currentLend.id,
-        phoneNo: phoneNumber,
+        userId: userData?.userId,
         name: currentLend.name,
         title: currentLend.title,
         amount: currentLend.totalAmount,

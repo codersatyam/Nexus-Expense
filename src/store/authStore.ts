@@ -3,25 +3,31 @@
  * Using a simple context-based state management approach
  */
 
-import React, { createContext, useContext, useState, ReactNode } from 'react';
+import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
+import { 
+  getEmailVerificationStatus, 
+  isEmailVerified, 
+  getUserId 
+} from '../services/emailVerificationService';
 
 interface User {
   id: string;
-  phoneNumber: string;
-  name?: string;
   email?: string;
+  name?: string;
 }
 
 interface AuthState {
   user: User | null;
   isAuthenticated: boolean;
   isLoading: boolean;
+  isEmailVerified: boolean;
 }
 
 interface AuthContextType extends AuthState {
-  login: (phoneNumber: string) => Promise<void>;
+  loginWithEmail: (email: string) => Promise<void>;
   logout: () => void;
   updateUserProfile: (userData: Partial<User>) => void;
+  checkEmailVerification: () => Promise<void>;
 }
 
 // Create the auth context
@@ -38,10 +44,39 @@ export function AuthProvider({ children }: AuthProviderProps) {
     user: null,
     isAuthenticated: false,
     isLoading: false,
+    isEmailVerified: false,
   });
 
-  // Login function
-  const login = async (phoneNumber: string) => {
+  // Check email verification status on mount
+  useEffect(() => {
+    checkEmailVerification();
+  }, []);
+
+  // Check email verification status
+  const checkEmailVerification = async () => {
+    try {
+      const verified = await isEmailVerified();
+      const verificationStatus = await getEmailVerificationStatus();
+      const userId = await getUserId();
+
+      if (verified && verificationStatus) {
+        setState(prev => ({
+          ...prev,
+          isEmailVerified: true,
+          isAuthenticated: true,
+          user: {
+            id: userId || verificationStatus.userId || 'unknown',
+            email: verificationStatus.email,
+          },
+        }));
+      }
+    } catch (error) {
+      console.error('Error checking email verification:', error);
+    }
+  };
+
+  // Login function (email-based)
+  const loginWithEmail = async (email: string) => {
     setState(prev => ({ ...prev, isLoading: true }));
     
     try {
@@ -52,13 +87,14 @@ export function AuthProvider({ children }: AuthProviderProps) {
       // Create a mock user
       const user: User = {
         id: `user_${Date.now()}`,
-        phoneNumber,
+        email,
       };
       
       setState({
         user,
         isAuthenticated: true,
         isLoading: false,
+        isEmailVerified: true,
       });
     } catch (error) {
       setState(prev => ({ ...prev, isLoading: false }));
@@ -72,6 +108,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
       user: null,
       isAuthenticated: false,
       isLoading: false,
+      isEmailVerified: false,
     });
   };
 
@@ -91,9 +128,10 @@ export function AuthProvider({ children }: AuthProviderProps) {
   // Create the context value
   const value: AuthContextType = {
     ...state,
-    login,
+    loginWithEmail,
     logout,
     updateUserProfile,
+    checkEmailVerification,
   };
 
   return React.createElement(AuthContext.Provider, { value }, children);

@@ -133,7 +133,7 @@ export default function AddExpenseScreen() {
     try {
       // Prepare expense data for API
       const expenseData: AddExpenseRequest = {
-        phoneNo: '9548313517', // Using hardcoded phone number for now
+        userId: localStorage.getItem('userId'),
         title: title.trim(),
         amount: parseInt(amount, 10),
         expenseDate: date,

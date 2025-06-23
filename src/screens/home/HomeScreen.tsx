@@ -28,9 +28,9 @@ export default function HomeScreen() {
       setIsLoading(true);
       setError(null);
       // Using hardcoded phone number for now - replace with actual user phone when needed
-      const phoneNumber = '9548313517';
-      console.log('🔍 HomeScreen: Fetching expenses for phone:', phoneNumber);
-      const data = await fetchExpenses(phoneNumber);
+      const userData = JSON.parse(localStorage.getItem('email_verification_status') || '{}');
+      console.log('🔍 HomeScreen: Fetching expenses for userId:', userData?.userId);
+      const data = await fetchExpenses(userData?.userId);
       console.log('📊 HomeScreen: Loaded expenses:', data.length);
       setExpenses(data);
     } catch (err) {

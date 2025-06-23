@@ -21,7 +21,7 @@ export interface ExpenseResponse {
 }
 
 export interface AddExpenseRequest {
-  phoneNo: string;
+  userId: string;
   title: string;
   amount: number;
   expenseDate: string;
@@ -39,10 +39,10 @@ export interface AddExpenseResponse {
  * Fetch all expenses for a user
  * @param phoneNumber - The user's phone number
  */
-export const fetchExpenses = async (phoneNumber: string): Promise<Expense[]> => {
+export const fetchExpenses = async (userId: string|null): Promise<Expense[]> => {
   try {
-    console.log('Fetching expenses for:', phoneNumber);
-    const response = await fetch(`${baseurl}/api/v1/expense/all/${phoneNumber}`, {
+    console.log('Fetching expenses for:', userId);
+    const response = await fetch(`${baseurl}/api/v1/expense/all/${userId}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',

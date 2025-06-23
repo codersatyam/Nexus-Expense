@@ -1,6 +1,58 @@
 # Services
 
-This directory contains all the business logic services for the Expenses Tracker app.
+This directory contains service modules that handle business logic and external integrations.
+
+## Email Verification Service
+
+The `emailVerificationService.ts` module handles email verification status and user ID storage using AsyncStorage.
+
+### Features:
+- Store and retrieve email verification status
+- Store and retrieve user ID for API calls
+- Check if email is verified
+- Clear verification data on logout
+
+### Usage:
+```typescript
+import { 
+  storeEmailVerificationStatus, 
+  getEmailVerificationStatus, 
+  isEmailVerified, 
+  storeUserId, 
+  getUserId,
+  clearEmailVerificationData 
+} from '../services/emailVerificationService';
+
+// Store verification status
+await storeEmailVerificationStatus({
+  isVerified: true,
+  email: 'user@example.com',
+  userId: 'user_123',
+  verifiedAt: new Date().toISOString()
+});
+
+// Check if email is verified
+const verified = await isEmailVerified();
+
+// Get user ID for API calls
+const userId = await getUserId();
+```
+
+## Pin Service
+
+The `pinService.ts` module handles PIN-based authentication and security features.
+
+## Loan Service
+
+The `loanService.ts` module handles loan-related operations and calculations.
+
+## Notification Service
+
+The `notificationService.ts` module handles push notifications and local notifications.
+
+## Lend Service
+
+The `lendService.ts` module handles lending operations and calculations.
 
 ## Available Services
 

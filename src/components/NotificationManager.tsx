@@ -79,6 +79,7 @@ const NotificationManager: React.FC<NotificationManagerProps> = ({ onNotificatio
           sound: 'default',
         },
         trigger: {
+          type: Notifications.SchedulableTriggerInputTypes.TIME_INTERVAL,
           seconds: secondsUntilTarget,
         },
       });

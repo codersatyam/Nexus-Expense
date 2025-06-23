@@ -43,9 +43,8 @@ export default function StatsScreen() {
     try {
       setIsLoading(true);
       setError(null);
-      const phoneNumber = '9548313517';
-      console.log('🔍 StatsScreen: Fetching expenses for phone:', phoneNumber);
-      const data = await fetchExpenses(phoneNumber);
+      const userData = JSON.parse(localStorage.getItem('email_verification_status') || '{}');
+      const data = await fetchExpenses(userData?.userId);
       console.log('📊 StatsScreen: Loaded expenses:', data.length);
       setExpenses(data);
     } catch (err) {

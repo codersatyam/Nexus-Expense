@@ -69,7 +69,10 @@ export const useNotifications = () => {
           data: { type: 'daily_expense_reminder' },
           sound: 'default',
         },
-        trigger: secondsUntilTarget > 0 ? { seconds: secondsUntilTarget } : null,
+        trigger: secondsUntilTarget > 0 ? { 
+          type: Notifications.SchedulableTriggerInputTypes.TIME_INTERVAL,
+          seconds: secondsUntilTarget 
+        } : null,
       });
 
       console.log('Daily reminder scheduled:', notificationId);

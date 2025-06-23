@@ -23,7 +23,7 @@ export interface LendApiData {
 }
 
 export interface AddLendRequest {
-  phoneNo: string;
+  userId: string;
   name: string;
   title: string;
   amount: number;
@@ -39,7 +39,7 @@ export interface AddLendResponse {
 
 export interface UpdateLendRequest {
   id: string;
-  phoneNo: string;
+  userId: string;
   name: string;
   title: string;
   amount: number;
@@ -59,10 +59,10 @@ export interface UpdateLendResponse {
  * Fetch all lends for a user by phone number
  * @param phoneNumber - The user's phone number
  */
-export const fetchAllLends = async (phoneNumber: string): Promise<LendApiResponse[]> => {
+export const fetchAllLends = async (userId: string|null): Promise<LendApiResponse[]> => {
   try {
-    console.log('Fetching lends for:', phoneNumber);
-    const response = await fetch(`${baseurl}/api/v1/lend/all/${phoneNumber}`, {
+    console.log('Fetching lends for:', userId);
+      const response = await fetch(`${baseurl}/api/v1/lend/all/${userId}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',

@@ -223,21 +223,21 @@ const PinSettings: React.FC = () => {
 
         {pinSet && (
           <View style={styles.actionButtons}>
-            <TouchableOpacity
+            {/* <TouchableOpacity
               style={styles.actionButton}
               onPress={handleChangePinPress}
             >
               <Ionicons name="key" size={20} color="#007AFF" />
               <Text style={styles.actionButtonText}>Change PIN</Text>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
 
-            <TouchableOpacity
+            {/* <TouchableOpacity
               style={styles.resetButton}
               onPress={handleResetPin}
             >
               <Ionicons name="refresh" size={20} color="#FF9500" />
               <Text style={styles.resetButtonText}>Reset to Default</Text>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
           </View>
         )}
 
@@ -253,13 +253,7 @@ const PinSettings: React.FC = () => {
 
       <View style={styles.infoContainer}>
         <Text style={styles.infoText}>
-          🔒 Your PIN is stored locally on your device
-        </Text>
-        <Text style={styles.infoText}>
           📱 PIN must be exactly 4 digits (any combination allowed)
-        </Text>
-        <Text style={styles.infoText}>
-          ⚠️ Default PIN is 1234 if you haven't set a custom one
         </Text>
         {!pinSet && (
           <Text style={styles.infoText}>

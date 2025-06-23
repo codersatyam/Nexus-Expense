@@ -13,6 +13,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { fetchExpenses, Expense } from '../../api/expenseApi';
 import { categories, Category } from '../../constants/categories';
 import { formatCurrency, formatDate } from '../../utils/formatters';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const { width } = Dimensions.get('window');
 
@@ -43,7 +44,8 @@ export default function StatsScreen() {
     try {
       setIsLoading(true);
       setError(null);
-      const userData = JSON.parse(localStorage.getItem('email_verification_status') || '{}');
+      const userDataStr = await AsyncStorage.getItem('email_verification_status');
+      const userData = userDataStr ? JSON.parse(userDataStr) : {};
       const data = await fetchExpenses(userData?.userId);
       console.log('📊 StatsScreen: Loaded expenses:', data.length);
       setExpenses(data);

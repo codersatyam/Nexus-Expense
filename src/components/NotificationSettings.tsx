@@ -192,12 +192,12 @@ const NotificationSettings: React.FC = () => {
           />
         </View>
 
-        {hasPermission && (
+        {/* {hasPermission && (
           <TouchableOpacity style={styles.testButton} onPress={sendTestNotification}>
             <Ionicons name="flash" size={20} color="#fff" />
             <Text style={styles.testButtonText}>Send Test Notification</Text>
           </TouchableOpacity>
-        )}
+        )} */}
       </View>
 
       <View style={styles.infoContainer}>

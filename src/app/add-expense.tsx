@@ -16,6 +16,7 @@ import {
 import { router } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { addExpense, AddExpenseRequest } from '../api/expenseApi';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const categories = [
   { name: 'Food', icon: 'restaurant', color: '#FF6B6B' },
@@ -131,9 +132,9 @@ export default function AddExpenseScreen() {
     setIsLoading(true);
 
     try {
-      // Prepare expense data for API
+      const userId = await AsyncStorage.getItem('userId') || '';
       const expenseData: AddExpenseRequest = {
-        userId: localStorage.getItem('userId'),
+        userId: userId,
         title: title.trim(),
         amount: parseInt(amount, 10),
         expenseDate: date,

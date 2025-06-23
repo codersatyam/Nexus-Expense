@@ -1,6 +1,6 @@
 import Constants from 'expo-constants';
 
-const baseurl = Constants.expoConfig?.extra?.API_HOST;
+const baseurl = Constants.expoConfig?.extra?.API_HOST || 'https://nexus-mono.onrender.com';
 
 /**
  * Send OTP to the provided phone number

@@ -13,8 +13,9 @@ import {
 import { router } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { fetchExpenses, Expense } from '../../api/expenseApi';
-import { categories, Category, categoryTags } from '../../constants/categories';
+import { categories, Category, categoryTags, CategoryTag } from '../../constants/categories';
 import { formatCurrency, formatDate } from '../../utils/formatters';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function RecordsScreen() {
   const [expenses, setExpenses] = useState<Expense[]>([]);
@@ -46,16 +47,13 @@ export default function RecordsScreen() {
     try {
       setIsLoading(true);
       setError(null);
-      const userData = JSON.parse(localStorage.getItem('email_verification_status') || '{}');
-      console.log('🔍 Fetching expenses for userId:', userData);
+      const userDataStr = await AsyncStorage.getItem('email_verification_status');
+      const userData = userDataStr ? JSON.parse(userDataStr) : {};
       const data = await fetchExpenses(userData?.userId);
-      console.log('📊 Raw API response data:', JSON.stringify(data, null, 2));
-      console.log('📈 Number of expenses received:', data.length);
       setExpenses(data);
-      console.log('✅ Expenses set in state:', data.length);
     } catch (err) {
-      console.error('❌ Failed to load expenses:', err);
-      setError('Failed to load expenses. Please try again.');
+      console.error(err);
+      setError('Failed to load expenses');
     } finally {
       setIsLoading(false);
     }
@@ -256,7 +254,6 @@ export default function RecordsScreen() {
 
   const renderExpenseItem = ({ item }: { item: Expense }) => {
     const category = categories.find((c: Category) => c.name === item.category);
-    const tags = categoryTags[item.category as keyof typeof categoryTags] || [];
 
     return (
       <View style={styles.expenseItem}>
@@ -283,10 +280,7 @@ export default function RecordsScreen() {
               <Text style={styles.expenseCategoryText}>{item.category}</Text>
             </View>
           )}
-          
-          {tags.map((tag, index) => (
-            <Text key={index} style={styles.expenseTag}>• {tag}</Text>
-          ))}
+          <Text style={styles.expenseTag}>• {item.tag}</Text>
           
           <Text style={styles.expenseDate}>• {formatDate(new Date(item.expenseDate))}</Text>
         </View>

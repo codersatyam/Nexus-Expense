@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { StyleSheet, Text, View, TouchableOpacity, ScrollView, FlatList } from "react-native";
 import { useRouter, useFocusEffect } from "expo-router";
 import { Ionicons } from '@expo/vector-icons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { fetchExpenses, Expense } from '../../api/expenseApi';
 import { categories, Category } from '../../constants/categories';
 import { formatCurrency, formatDate } from '../../utils/formatters';
@@ -27,8 +28,8 @@ export default function HomeScreen() {
     try {
       setIsLoading(true);
       setError(null);
-      // Using hardcoded phone number for now - replace with actual user phone when needed
-      const userData = JSON.parse(localStorage.getItem('email_verification_status') || '{}');
+      const userDataStr = await AsyncStorage.getItem('email_verification_status');
+      const userData = userDataStr ? JSON.parse(userDataStr) : {};
       console.log('🔍 HomeScreen: Fetching expenses for userId:', userData?.userId);
       const data = await fetchExpenses(userData?.userId);
       console.log('📊 HomeScreen: Loaded expenses:', data.length);
@@ -192,7 +193,7 @@ export default function HomeScreen() {
       <View style={styles.welcomeCard}>
         <View style={styles.cardHeader}>
           <View>
-            <Text style={styles.welcomeText}>Welcome to</Text>
+            {/* <Text style={styles.welcomeText}>Welcome to</Text> */}
             <Text style={styles.nameText}>Nexus</Text>
           </View>
         </View>
@@ -213,14 +214,14 @@ export default function HomeScreen() {
               {new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}
             </Text>
             <View style={styles.transactionInfo}>
-              <Ionicons name="receipt-outline" size={16} color="rgba(255, 255, 255, 0.8)" />
+              <Ionicons name="receipt-outline" size={16} color="#34C759" />
               <Text style={styles.transactionText}>
                 {currentMonthTransactionCount} transactions
               </Text>
             </View>
           </View>
           <View style={styles.summaryRight}>
-            <Text style={styles.totalAmount}>{formatCurrency(currentMonthTotal)}</Text>
+            <Text style={[styles.totalAmount, {color: '#34C759'}]}>{formatCurrency(currentMonthTotal)}</Text>
             <Text style={styles.totalLabel}>Total Spent</Text>
           </View>
         </View>
@@ -341,7 +342,7 @@ const styles = StyleSheet.create({
   },
   cardSubtext: {
     color: 'rgba(255, 255, 255, 0.8)',
-    fontSize: 14,
+    fontSize: 13,
     marginBottom: 16,
   },
   calculateButton: {
@@ -402,7 +403,7 @@ const styles = StyleSheet.create({
     color: '#666',
   },
   summaryCard: {
-    backgroundColor: '#4264ED',
+    backgroundColor: '#5d6d7e',
     margin: 16,
     borderRadius: 24,
     padding: 24,

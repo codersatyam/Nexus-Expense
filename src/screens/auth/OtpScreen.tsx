@@ -145,6 +145,7 @@ export default function OtpScreen() {
       console.log('OTP verified successfully:', response);
       
       // Store all data from the API response
+      console.log('🔍 Response:', response);
       await storeAuthResponse({...response, email: email});
 
       // Navigate to main app

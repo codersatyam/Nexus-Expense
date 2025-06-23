@@ -3,6 +3,7 @@
  */
 
 import { fetchAllLends, addLend as addLendApi, updateLend as updateLendApi, LendApiResponse, AddLendRequest, UpdateLendRequest } from '../api/lendApi';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 /**
  * Lend status enum - simplified
@@ -197,7 +198,8 @@ const mockLends: Lend[] = [
 export const getAllLends = async (): Promise<Lend[]> => {
   try {
     // If phone number is provided, use real API
-    const userData = JSON.parse(localStorage.getItem('email_verification_status') || '{}');
+    const userDataStr = await AsyncStorage.getItem('email_verification_status');
+    const userData = userDataStr ? JSON.parse(userDataStr) : {};
     if (userData) {
       const apiResponse = await fetchAllLends(userData?.userId);
       return apiResponse.map(convertApiResponseToLend);
@@ -307,7 +309,8 @@ export const addLend = async (
   lendData: Omit<Lend, 'id' | 'createdAt' | 'updatedAt'>,
 ): Promise<Lend> => {
   try {
-    const userData = JSON.parse(localStorage.getItem('email_verification_status') || '{}');
+    const userDataStr = await AsyncStorage.getItem('email_verification_status');
+    const userData = userDataStr ? JSON.parse(userDataStr) : {};
     // If phone number is provided, use real API
     if (userData) {
       // Convert local lend data to API format
@@ -362,7 +365,8 @@ export const addLend = async (
 export const getLendById = async (id: string): Promise<Lend | null> => {
   try {
     // If phone number is provided, fetch from API
-    const userData = JSON.parse(localStorage.getItem('email_verification_status') || '{}');
+    const userDataStr = await AsyncStorage.getItem('email_verification_status');
+    const userData = userDataStr ? JSON.parse(userDataStr) : {};
     if (userData) {
       const allLends = await getAllLends();
       const foundLend = allLends.find(lend => lend.id === id);
@@ -386,7 +390,8 @@ export const getLendById = async (id: string): Promise<Lend | null> => {
 export const updateLendStatus = async (id: string, status: LendStatus, phoneNumber?: string): Promise<Lend | null> => {
   try {
     // If phone number is provided, use real API
-    const userData = JSON.parse(localStorage.getItem('email_verification_status') || '{}');
+    const userDataStr = await AsyncStorage.getItem('email_verification_status');
+    const userData = userDataStr ? JSON.parse(userDataStr) : {};
     if (userData) {
       // First get the current lend data
       const allLends = await getAllLends();
@@ -451,7 +456,8 @@ export const updateLendPayment = async (
 ): Promise<Lend | null> => {
   try {
     // If phone number is provided, use real API
-    const userData = JSON.parse(localStorage.getItem('email_verification_status') || '{}');
+    const userDataStr = await AsyncStorage.getItem('email_verification_status');
+    const userData = userDataStr ? JSON.parse(userDataStr) : {};
     if (userData) {
       // First get the current lend data
       const allLends = await getAllLends();

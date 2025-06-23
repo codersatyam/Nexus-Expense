@@ -231,6 +231,7 @@ export default function EmailScreen() {
               </View>
             </View>
           </Animated.View>
+          <Text style={{textAlign: 'center', fontSize: 16, color: '#333', paddingBottom: 50}}>Made in INDIA 🇮🇳</Text>
         </KeyboardAvoidingView>
       </LinearGradient>
     </SafeAreaView>

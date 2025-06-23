@@ -15,20 +15,6 @@ const SettingsScreen = () => {
       <ScrollView style={styles.content}>
         <PinSettings />
         <NotificationSettings />
-        
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>App Information</Text>
-          <View style={styles.infoCard}>
-            <View style={styles.infoRow}>
-              <Text style={styles.infoLabel}>Version</Text>
-              <Text style={styles.infoValue}>1.0.0</Text>
-            </View>
-            <View style={styles.infoRow}>
-              <Text style={styles.infoLabel}>Build</Text>
-              <Text style={styles.infoValue}>2025.1.1</Text>
-            </View>
-          </View>
-        </View>
 
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Features</Text>
@@ -40,6 +26,14 @@ const SettingsScreen = () => {
             <View style={styles.featureItem}>
               <Ionicons name="people" size={20} color="#34C759" />
               <Text style={styles.featureText}>Lend Management</Text>
+            </View>
+            <View style={styles.featureItem}>
+              <Ionicons name="cash-outline" size={20} color="#FF3B30" />
+              <Text style={styles.featureText}>Split Expenses  <Ionicons name="notifications" size={16} color="#007AFF" /></Text>
+            </View>
+            <View style={styles.featureItem}>
+              <Ionicons name="cash-outline" size={20} color="#FF3B30" />
+              <Text style={styles.featureText}>Investments Tracker  <Ionicons name="notifications" size={16} color="#007AFF" /></Text>
             </View>
             <View style={styles.featureItem}>
               <Ionicons name="lock-closed" size={20} color="#FF9500" />
@@ -55,6 +49,21 @@ const SettingsScreen = () => {
             </View>
           </View>
         </View>
+
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>App Information</Text>
+          <View style={styles.infoCard}>
+            <View style={styles.infoRow}>
+              <Text style={styles.infoLabel}>Version</Text>
+              <Text style={styles.infoValue}>1.0.0</Text>
+            </View>
+            <View style={styles.infoRow}>
+              <Text style={styles.infoLabel}>Build</Text>
+              <Text style={styles.infoValue}>2025.1.1</Text>
+            </View>
+          </View>
+        </View>
+        <Text style={{textAlign: 'center', fontSize: 16, color: '#333', paddingBottom: 30}}>Made in INDIA 🇮🇳</Text>
       </ScrollView>
     </View>
   );

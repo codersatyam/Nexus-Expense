@@ -59,7 +59,7 @@ export default function HomeScreen() {
   // Get recent expenses (latest 5)
   const recentExpenses = expenses
     .sort((a, b) => new Date(b.expenseDate).getTime() - new Date(a.expenseDate).getTime())
-    .slice(0, 5);
+    .slice(0, 4);
 
   // Calculate current month total
   const currentMonthTotal = expenses

@@ -241,6 +241,10 @@ export default function RecordsScreen() {
     setShowTagModal(false);
   };
 
+  const handleAddExpense = () => {
+    router.push('/add-expense');
+  };
+
   // Debug render info
   console.log('🎨 Rendering RecordsScreen with:', {
     isLoading,
@@ -370,11 +374,17 @@ export default function RecordsScreen() {
         {/* Header */}
         <View style={styles.header}>
           <Text style={styles.headerTitle}>Expense Records</Text>
+          <TouchableOpacity 
+            style={styles.addButton}
+            onPress={() => router.push('/add-expense')}
+          >
+            <Ionicons name="add" size={24} color="#fff" />
+          </TouchableOpacity>
         </View>
 
         {/* Date Filter Options */}
         <View style={styles.filterContainer}>
-          <Text style={styles.filterSectionTitle}>Date Range</Text>
+          {/* <Text style={styles.filterSectionTitle}>Date Range</Text> */}
           <FlatList
             data={dateFilterOptions}
             renderItem={renderDateFilterOption}
@@ -582,17 +592,29 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
     padding: 20,
     paddingBottom: 10,
+    backgroundColor: '#fff',
+    borderBottomWidth: 1,
+    borderBottomColor: '#e9ecef',
   },
   headerTitle: {
-    fontSize: 28,
+    fontSize: 24,
     fontWeight: 'bold',
-    color: '#1a1a1a',
+    color: '#333',
+  },
+  addButton: {
+    backgroundColor: '#4264ED',
+    padding: 10,
+    borderRadius: 8,
   },
   filterContainer: {
     paddingHorizontal: 20,
     marginBottom: 20,
+    marginTop: 15,
   },
   filterSectionTitle: {
     fontSize: 16,

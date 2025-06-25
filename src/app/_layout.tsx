@@ -15,6 +15,8 @@ export default function RootLayout() {
         <Stack.Screen name="(tabs)" />
         <Stack.Screen name="add-expense" />
         <Stack.Screen name="lend-details" />
+        <Stack.Screen name="investments" />
+        <Stack.Screen name="add-investment" />
       </Stack>
     </AuthProvider>
   );

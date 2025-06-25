@@ -1,10 +1,13 @@
 import React from 'react';
-import { View, Text, StyleSheet, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import NotificationSettings from '../../components/NotificationSettings';
 import PinSettings from '../../components/PinSettings';
+import { useRouter } from 'expo-router';
 
 const SettingsScreen = () => {
+  const router = useRouter();
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -33,7 +36,13 @@ const SettingsScreen = () => {
             </View>
             <View style={styles.featureItem}>
               <Ionicons name="cash-outline" size={20} color="#FF3B30" />
-              <Text style={styles.featureText}>Investments Tracker  <Ionicons name="notifications" size={16} color="#007AFF" /></Text>
+              <TouchableOpacity 
+                style={styles.featureButton}
+                onPress={() => router.push('/investments')}
+              >
+                <Text style={styles.featureText}>Investments Tracker</Text>
+                <Ionicons name="chevron-forward" size={20} color="#666" />
+              </TouchableOpacity>
             </View>
             <View style={styles.featureItem}>
               <Ionicons name="lock-closed" size={20} color="#FF9500" />
@@ -147,6 +156,11 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#333',
     marginLeft: 15,
+  },
+  featureButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
   },
 });
 

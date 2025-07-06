@@ -1,4 +1,4 @@
-import { StyleSheet, TextInput, View, Text } from 'react-native';
+import { StyleSheet, TextInput, View, Text, KeyboardTypeOptions } from 'react-native';
 
 interface InputProps {
   value: string;
@@ -7,6 +7,8 @@ interface InputProps {
   label?: string;
   error?: string;
   secureTextEntry?: boolean;
+  keyboardType?: KeyboardTypeOptions;
+  multiline?: boolean;
 }
 
 export const Input = ({ 
@@ -15,17 +17,26 @@ export const Input = ({
   placeholder, 
   label, 
   error,
-  secureTextEntry 
+  secureTextEntry,
+  keyboardType,
+  multiline
 }: InputProps) => {
   return (
     <View style={styles.container}>
       {label && <Text style={styles.label}>{label}</Text>}
       <TextInput
-        style={[styles.input, error && styles.inputError]}
+        style={[
+          styles.input, 
+          error && styles.inputError,
+          multiline && styles.multilineInput
+        ]}
         value={value}
         onChangeText={onChangeText}
         placeholder={placeholder}
         secureTextEntry={secureTextEntry}
+        keyboardType={keyboardType}
+        multiline={multiline}
+        numberOfLines={multiline ? 3 : 1}
       />
       {error && <Text style={styles.errorText}>{error}</Text>}
     </View>
@@ -47,6 +58,10 @@ const styles = StyleSheet.create({
     padding: 12,
     borderRadius: 8,
     fontSize: 16,
+  },
+  multilineInput: {
+    height: 80,
+    textAlignVertical: 'top',
   },
   inputError: {
     borderColor: '#ff3b30',

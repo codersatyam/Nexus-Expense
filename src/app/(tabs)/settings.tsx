@@ -45,6 +45,16 @@ const SettingsScreen = () => {
               </TouchableOpacity>
             </View>
             <View style={styles.featureItem}>
+              <Ionicons name="trending-up" size={20} color="#34C759" />
+              <TouchableOpacity 
+                style={styles.featureButton}
+                onPress={() => router.push('/income')}
+              >
+                <Text style={styles.featureText}>Income Tracker</Text>
+                <Ionicons name="chevron-forward" size={20} color="#666" />
+              </TouchableOpacity>
+            </View>
+            <View style={styles.featureItem}>
               <Ionicons name="lock-closed" size={20} color="#FF9500" />
               <Text style={styles.featureText}>PIN Protection</Text>
             </View>

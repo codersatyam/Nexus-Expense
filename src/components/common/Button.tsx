@@ -1,29 +1,40 @@
-import { StyleSheet, TouchableOpacity, Text } from 'react-native';
+import { StyleSheet, TouchableOpacity, Text, ActivityIndicator } from 'react-native';
 
 interface ButtonProps {
   title: string;
   onPress: () => void;
   variant?: 'primary' | 'secondary';
   disabled?: boolean;
+  loading?: boolean;
 }
 
-export const Button = ({ title, onPress, variant = 'primary', disabled }: ButtonProps) => {
+export const Button = ({ 
+  title, 
+  onPress, 
+  variant = 'primary', 
+  disabled,
+  loading 
+}: ButtonProps) => {
   return (
     <TouchableOpacity 
       style={[
         styles.button, 
         variant === 'secondary' && styles.secondaryButton,
-        disabled && styles.disabled
+        (disabled || loading) && styles.disabled
       ]} 
       onPress={onPress}
-      disabled={disabled}
+      disabled={disabled || loading}
     >
-      <Text style={[
-        styles.text,
-        variant === 'secondary' && styles.secondaryText
-      ]}>
-        {title}
-      </Text>
+      {loading ? (
+        <ActivityIndicator color={variant === 'secondary' ? '#007AFF' : '#FFFFFF'} />
+      ) : (
+        <Text style={[
+          styles.text,
+          variant === 'secondary' && styles.secondaryText
+        ]}>
+          {title}
+        </Text>
+      )}
     </TouchableOpacity>
   );
 };

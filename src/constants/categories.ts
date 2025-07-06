@@ -1,3 +1,7 @@
+import { Ionicons } from '@expo/vector-icons';
+
+type IconName = keyof typeof Ionicons.glyphMap;
+
 export interface Category {
   name: string;
   icon: string;
@@ -39,4 +43,19 @@ export const categoryTags: CategoryTag[] = [
   {name: 'House', icon: 'home', color: '#F7DC6F', tags: ['Rent', 'Maintenance', 'Repairs', 'Utilities', 'Others']},
   {name: 'Trip', icon: 'mountain', color: '#F7DC6F', tags: ['Solo', 'Group', 'Others']},
   {name: 'Others', icon: 'ellipsis-horizontal', color: '#F7DC6F', tags: ['Miscellaneous', 'Personal Care', 'Gifts', 'Donations', 'Custom']},
+];
+
+export interface IncomeCategory {
+  id: string;
+  name: string;
+  icon: IconName;
+}
+
+export const INCOME_CATEGORIES: IncomeCategory[] = [
+  { id: 'salary', name: 'Salary', icon: 'cash-outline' },
+  { id: 'freelance', name: 'Freelance', icon: 'laptop-outline' },
+  { id: 'investment', name: 'Investment', icon: 'trending-up-outline' },
+  { id: 'business', name: 'Business', icon: 'briefcase-outline' },
+  { id: 'rental', name: 'Rental', icon: 'home-outline' },
+  { id: 'other', name: 'Other', icon: 'ellipsis-horizontal-outline' },
 ];

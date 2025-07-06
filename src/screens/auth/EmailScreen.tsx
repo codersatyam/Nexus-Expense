@@ -40,10 +40,10 @@ export default function EmailScreen() {
 
   useEffect(() => {
     // Check if user is already authenticated
-    // if (isAuthenticated && isEmailVerified && !isLoading) {
-    //   router.replace('/(tabs)');
-    //   return;
-    // }
+    if (isAuthenticated && isEmailVerified && !isLoading) {
+      router.replace('/(tabs)');
+      return;
+    }
 
     // Fade in the content
     Animated.timing(fadeAnim, {
